@@ -1,0 +1,7 @@
+metric,value
+read_count,1000
+total_bases,127430
+min_read_length,25
+max_read_length,150
+mean_read_length,127.43
+mean_phred_quality,35.22

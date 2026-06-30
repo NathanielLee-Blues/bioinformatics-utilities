@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# System
+.DS_Store
+*.tmp
+*.log
+
+# Avoid accidentally committing large raw compressed files
+data/raw/
+*.fastq.gz
+*.fq.gz
+*.tar.gz
