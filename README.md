@@ -2,7 +2,6 @@
 
 ![Python](https://img.shields.io/badge/Python-Command--line%20utilities-blue)
 ![Bioinformatics](https://img.shields.io/badge/Bioinformatics-FASTA%20FASTQ%20VCF-purple)
-![Status](https://img.shields.io/badge/Status-Version%201%20complete-lightgrey)
 
 ## Project overview
 
@@ -241,6 +240,3 @@ They are useful for small files, quick checks, and demonstrating file parsing lo
 
 For more detail, see [`docs/LIMITATIONS.md`](docs/LIMITATIONS.md).
 
-## Status
-
-Version 1 complete.
