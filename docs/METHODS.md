@@ -1,73 +1,29 @@
 # Methods
 
-## Data preparation
+## Input preparation
 
-Input files are prepared using:
+`scripts/prepare_inputs.sh` copies the REL606 reference FASTA and filtered VCF from the companion variant-calling project. It also creates FASTQ subsets containing the first 1,000 reads from each paired-end file so that the repository remains small while retaining real sequencing records.
 
-    bash scripts/prepare_inputs.sh
+## FASTA parsing
 
-This script copies real input files from the `variant-calling-workflow` project and creates lightweight FASTQ subsets for use in this repository.
+`fasta_stats.py` identifies header lines, concatenates sequence lines for each record and calculates sequence count, total length, minimum, maximum and mean length, and GC percentage. Results are printed and can be written to CSV.
 
-The prepared inputs are stored under:
+## FASTQ parsing
 
-    data/inputs/
+`fastq_basic_qc.py` reads FASTQ records in four-line units, validates the sequence and quality lengths, converts ASCII quality characters to Phred scores and calculates read-count, base-count, read-length and mean-quality summaries.
 
-## FASTA statistics
+## VCF parsing
 
-The `fasta_stats.py` script parses a FASTA file and calculates:
-
-- sequence count
-- total sequence length
-- minimum sequence length
-- maximum sequence length
-- mean sequence length
-- GC percentage
-
-GC percentage is calculated from the number of G and C bases divided by the total number of bases.
-
-## FASTQ basic QC
-
-The `fastq_basic_qc.py` script parses FASTQ records and calculates:
-
-- read count
-- total bases
-- minimum read length
-- maximum read length
-- mean read length
-- mean Phred quality score
-
-The script assumes Phred+33 quality encoding.
-
-## VCF summary
-
-The `vcf_summary.py` script parses non-header VCF records and reports:
-
-- total variants
-- PASS variants
-- SNP count
-- indel or complex variant count
-- variants per chromosome or contig
-
-Variants are classified as SNPs when the reference allele and all alternate alleles are single bases. Otherwise, they are classified as indel or complex.
+`vcf_summary.py` skips metadata lines, reads variant records, checks the filter field and classifies records as SNPs or indel/complex variants from the reference and alternate allele lengths. It also counts records by chromosome or contig.
 
 ## Reverse complement
 
-The `reverse_complement.py` script accepts a DNA sequence and returns the reverse complement.
-
-It supports:
-
-- A
-- T
-- G
-- C
-- N
-
-Lowercase input is accepted and output is returned in uppercase.
+`reverse_complement.py` validates the input DNA alphabet, maps each base to its complement and reverses the resulting sequence.
 
 ## Testing
 
-The test runner is:
+`tests/run_tests.py` uses Python’s standard library to run the command-line programs and compare their results with expected values from the included data. This tests both the core calculations and the interfaces used by a user.
 
-    tests/run_tests.py
+## Execution
 
-It uses only the Python standard library and checks that all utilities run successfully on the prepared input files.
+No external Python package is required for the current programs. Run them with Python 3 from the repository root and use `-o` where a CSV output is required.

@@ -1,52 +1,31 @@
 # Interpretation
 
-## Summary
+## FASTA statistics
 
-This project demonstrates a small set of Python utilities for common bioinformatics file formats.
+The REL606 reference input contains one sequence of 4,629,812 bases with a GC percentage of 50.77%. The single-record structure is consistent with a complete bacterial chromosome rather than a fragmented assembly.
 
-The tools were tested using real input files from an E. coli variant-calling workflow: a reference FASTA, paired-end FASTQ read subsets, and a filtered VCF.
+GC percentage is a useful descriptive property, but it does not assess assembly accuracy, completeness or contamination. Those questions require comparison with expected genome size, annotation and dedicated assembly-quality tools.
 
-## FASTA statistics interpretation
+## FASTQ summaries
 
-The FASTA utility found one reference sequence with a total length of 4,629,812 bases and GC content of 50.77%.
+Each FASTQ subset contains 1,000 reads. Mean read lengths were 127.43 bases for R1 and 131.41 bases for R2, while mean Phred quality scores were 35.22 and 35.55 respectively.
 
-This is consistent with summarising a single bacterial reference genome sequence.
+A Phred score in this range corresponds to a low average base-call error probability. However, the mean compresses the full quality distribution into one number. It cannot reveal whether quality falls towards read ends, whether a small subset of reads is poor or whether adapters and sequence-content biases are present.
 
-## FASTQ QC interpretation
+The tool is therefore suitable for a rapid numerical check but not as a replacement for FastQC or MultiQC.
 
-The FASTQ utility summarised 1,000 reads from each paired-end read file.
+## VCF summary
 
-For R1, the mean read length was 127.43 bases and the mean Phred quality score was 35.22.
+The VCF contains 407 PASS variants, including 353 SNPs and 54 indel or complex records. All records occur on `CP000819.1`, which is consistent with the single-contig reference used by the variant-calling workflow.
 
-For R2, the mean read length was 131.41 bases and the mean Phred quality score was 35.55.
+The program confirms the composition of the file; it does not assess whether the calls are correct. Variant confidence depends on the upstream alignment, caller, filtering rules and available evidence.
 
-These values suggest that the subsetted reads are generally high quality, although this simple script does not replace full tools such as FastQC or MultiQC.
+## Reverse complement
 
-## VCF summary interpretation
+The reverse-complement utility converts each nucleotide to its complement and reverses the sequence order. Supporting `N` allows the program to preserve an unknown or ambiguous base rather than rejecting otherwise usable sequences.
 
-The VCF utility identified 407 filtered candidate variants.
-
-These included:
-
-- 353 SNPs
-- 54 indel or complex variants
-
-All variants were located on contig `CP000819.1`.
-
-This matches the output from the earlier variant-calling workflow and shows that the utility can parse and summarise real VCF data.
-
-## Reverse complement interpretation
-
-The reverse-complement utility correctly converted:
-
-    ATGCCGTA
-
-to:
-
-    TACGGCAT
-
-This demonstrates simple sequence manipulation using standard DNA base-pairing rules.
+The function is appropriate for simple sequence checks. More complex nucleotide alphabets, RNA input or very large sequence records would require additional validation and format support.
 
 ## Overall conclusion
 
-This project demonstrates practical Python scripting for bioinformatics file handling. It provides evidence of command-line tool design, parsing of common genomics file formats, structured CSV output, and basic testing.
+The utilities return consistent summaries for the included inputs and make the underlying calculations transparent. Their value is clarity and ease of inspection. For high-throughput or production analysis, established libraries and dedicated tools provide stronger performance, format coverage and error handling.
